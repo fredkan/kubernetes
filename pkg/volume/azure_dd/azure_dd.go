@@ -144,8 +144,7 @@ func (plugin *azureDataDiskPlugin) GetVolumeLimits() (map[string]int64, error) {
 		// hoping external CCM or admin can set it. Returning
 		// default values from here will mean, no one can
 		// override them.
-		glog.Errorf("failed to get azure cloud in GetVolumeLimits, plugin.host: %s", plugin.host.GetHostName())
-		return volumeLimits, nil
+		return nil, fmt.Errorf("failed to get azure cloud in GetVolumeLimits, plugin.host: %s", plugin.host.GetHostName())
 	}
 
 	instances, ok := az.Instances()
@@ -188,7 +187,7 @@ func getMaxDataDiskCount(instanceType string, sizeList *[]compute.VirtualMachine
 			continue
 		}
 		if strings.ToUpper(*size.Name) == vmsize {
-			glog.V(2).Infof("got a matching size in getMaxDataDiskCount, Name: %s, MaxDataDiskCount: %s", *size.Name, *size.MaxDataDiskCount)
+			glog.V(2).Infof("got a matching size in getMaxDataDiskCount, Name: %s, MaxDataDiskCount: %d", *size.Name, *size.MaxDataDiskCount)
 			return int64(*size.MaxDataDiskCount)
 		}
 	}

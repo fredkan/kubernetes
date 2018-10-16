@@ -21,9 +21,9 @@ import (
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 )
 
 var (
@@ -46,7 +46,7 @@ func NewCmdCreateServiceAccount(f cmdutil.Factory, ioStreams genericclioptions.I
 	}
 
 	cmd := &cobra.Command{
-		Use: "serviceaccount NAME [--dry-run]",
+		Use:                   "serviceaccount NAME [--dry-run]",
 		DisableFlagsInUseLine: true,
 		Aliases:               []string{"sa"},
 		Short:                 i18n.T("Create a service account with the specified name"),

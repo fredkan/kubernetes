@@ -21,9 +21,9 @@ import (
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 )
 
 var (
@@ -46,7 +46,7 @@ func NewCmdCreateNamespace(f cmdutil.Factory, ioStreams genericclioptions.IOStre
 	}
 
 	cmd := &cobra.Command{
-		Use: "namespace NAME [--dry-run]",
+		Use:                   "namespace NAME [--dry-run]",
 		DisableFlagsInUseLine: true,
 		Aliases:               []string{"ns"},
 		Short:                 i18n.T("Create a namespace with the specified name"),

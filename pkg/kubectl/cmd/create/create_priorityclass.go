@@ -21,9 +21,9 @@ import (
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 )
 
 var (
@@ -49,7 +49,7 @@ func NewCmdCreatePriorityClass(f cmdutil.Factory, ioStreams genericclioptions.IO
 	}
 
 	cmd := &cobra.Command{
-		Use: "priorityclass NAME --value=VALUE --global-default=BOOL [--dry-run]",
+		Use:                   "priorityclass NAME --value=VALUE --global-default=BOOL [--dry-run]",
 		DisableFlagsInUseLine: true,
 		Aliases:               []string{"pc"},
 		Short:                 i18n.T("Create a priorityclass with the specified name."),

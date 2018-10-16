@@ -21,9 +21,9 @@ import (
 
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/kubernetes/pkg/kubectl"
-	"k8s.io/kubernetes/pkg/kubectl/cmd/templates"
 	cmdutil "k8s.io/kubernetes/pkg/kubectl/cmd/util"
 	"k8s.io/kubernetes/pkg/kubectl/util/i18n"
+	"k8s.io/kubernetes/pkg/kubectl/util/templates"
 )
 
 var (
@@ -46,11 +46,11 @@ func NewCmdCreateClusterRoleBinding(f cmdutil.Factory, ioStreams genericclioptio
 	}
 
 	cmd := &cobra.Command{
-		Use: "clusterrolebinding NAME --clusterrole=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run]",
+		Use:                   "clusterrolebinding NAME --clusterrole=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run]",
 		DisableFlagsInUseLine: true,
-		Short:   i18n.T("Create a ClusterRoleBinding for a particular ClusterRole"),
-		Long:    clusterRoleBindingLong,
-		Example: clusterRoleBindingExample,
+		Short:                 i18n.T("Create a ClusterRoleBinding for a particular ClusterRole"),
+		Long:                  clusterRoleBindingLong,
+		Example:               clusterRoleBindingExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			cmdutil.CheckErr(options.Complete(f, cmd, args))
 			cmdutil.CheckErr(options.Run())
@@ -64,9 +64,9 @@ func NewCmdCreateClusterRoleBinding(f cmdutil.Factory, ioStreams genericclioptio
 	cmdutil.AddGeneratorFlags(cmd, cmdutil.ClusterRoleBindingV1GeneratorName)
 	cmd.Flags().String("clusterrole", "", i18n.T("ClusterRole this ClusterRoleBinding should reference"))
 	cmd.MarkFlagCustom("clusterrole", "__kubectl_get_resource_clusterrole")
-	cmd.Flags().StringArray("user", []string{}, "Usernames to bind to the role")
-	cmd.Flags().StringArray("group", []string{}, "Groups to bind to the role")
-	cmd.Flags().StringArray("serviceaccount", []string{}, "Service accounts to bind to the role, in the format <namespace>:<name>")
+	cmd.Flags().StringArray("user", []string{}, "Usernames to bind to the clusterrole")
+	cmd.Flags().StringArray("group", []string{}, "Groups to bind to the clusterrole")
+	cmd.Flags().StringArray("serviceaccount", []string{}, "Service accounts to bind to the clusterrole, in the format <namespace>:<name>")
 	return cmd
 }
 

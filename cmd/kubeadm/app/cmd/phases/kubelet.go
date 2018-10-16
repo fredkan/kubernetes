@@ -21,8 +21,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"k8s.io/apimachinery/pkg/util/version"
 	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmapiv1alpha3 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1alpha3"
+	kubeadmapiv1beta1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1"
 	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
 	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
 	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
@@ -33,7 +34,6 @@ import (
 	configutil "k8s.io/kubernetes/cmd/kubeadm/app/util/config"
 	kubeconfigutil "k8s.io/kubernetes/cmd/kubeadm/app/util/kubeconfig"
 	"k8s.io/kubernetes/pkg/util/normalizer"
-	"k8s.io/kubernetes/pkg/util/version"
 	utilsexec "k8s.io/utils/exec"
 )
 
@@ -81,7 +81,7 @@ var (
 		kubeadm alpha phase kubelet config download
 
 		# Downloads the kubelet configuration from the ConfigMap in the cluster. Uses a specific desired kubelet version.
-		kubeadm alpha phase kubelet config download --kubelet-version v1.11.0
+		kubeadm alpha phase kubelet config download --kubelet-version v1.12.0
 		`)
 
 	kubeletConfigWriteToDiskLongDesc = normalizer.LongDesc(`
@@ -104,7 +104,7 @@ var (
 
 	kubeletConfigEnableDynamicExample = normalizer.Examples(`
 		# Enables dynamic kubelet configuration for a Node.
-		kubeadm alpha phase kubelet enable-dynamic-config --node-name node-1 --kubelet-version v1.11.0
+		kubeadm alpha phase kubelet enable-dynamic-config --node-name node-1 --kubelet-version v1.12.0
 
 		WARNING: This feature is still experimental, and disabled by default. Enable only if you know what you are doing, as it
 		may have surprising side-effects at this stage.
@@ -195,7 +195,7 @@ func NewCmdKubeletConfig() *cobra.Command {
 
 // NewCmdKubeletConfigUpload calls cobra.Command for uploading dynamic kubelet configuration
 func NewCmdKubeletConfigUpload() *cobra.Command {
-	cfg := &kubeadmapiv1alpha3.InitConfiguration{}
+	cfg := &kubeadmapiv1beta1.InitConfiguration{}
 	var cfgPath string
 	kubeConfigFile := constants.GetAdminKubeConfigPath()
 
@@ -211,8 +211,7 @@ func NewCmdKubeletConfigUpload() *cobra.Command {
 
 			// KubernetesVersion is not used, but we set it explicitly to avoid the lookup
 			// of the version from the internet when executing ConfigFileAndDefaultsToInternalConfig
-			err := SetKubernetesVersion(nil, cfg)
-			kubeadmutil.CheckErr(err)
+			SetKubernetesVersion(cfg)
 
 			// This call returns the ready-to-use configuration based on the configuration file
 			internalcfg, err := configutil.ConfigFileAndDefaultsToInternalConfig(cfgPath, cfg)
@@ -234,7 +233,7 @@ func NewCmdKubeletConfigUpload() *cobra.Command {
 
 // NewCmdKubeletAnnotateCRI calls cobra.Command for annotating the node with the given crisocket
 func NewCmdKubeletAnnotateCRI() *cobra.Command {
-	cfg := &kubeadmapiv1alpha3.InitConfiguration{}
+	cfg := &kubeadmapiv1beta1.InitConfiguration{}
 	var cfgPath string
 	kubeConfigFile := constants.GetAdminKubeConfigPath()
 
@@ -250,8 +249,7 @@ func NewCmdKubeletAnnotateCRI() *cobra.Command {
 
 			// KubernetesVersion is not used, but we set it explicitly to avoid the lookup
 			// of the version from the internet when executing ConfigFileAndDefaultsToInternalConfig
-			err := SetKubernetesVersion(nil, cfg)
-			kubeadmutil.CheckErr(err)
+			SetKubernetesVersion(cfg)
 
 			// This call returns the ready-to-use configuration based on the configuration file
 			internalcfg, err := configutil.ConfigFileAndDefaultsToInternalConfig(cfgPath, cfg)
@@ -308,7 +306,7 @@ func getKubeletVersion(kubeletVersionStr string) (*version.Version, error) {
 
 // NewCmdKubeletConfigWriteToDisk calls cobra.Command for writing init kubelet configuration
 func NewCmdKubeletConfigWriteToDisk() *cobra.Command {
-	cfg := &kubeadmapiv1alpha3.InitConfiguration{}
+	cfg := &kubeadmapiv1beta1.InitConfiguration{}
 	var cfgPath string
 	cmd := &cobra.Command{
 		Use:     "write-to-disk",
@@ -322,8 +320,7 @@ func NewCmdKubeletConfigWriteToDisk() *cobra.Command {
 
 			// KubernetesVersion is not used, but we set it explicitly to avoid the lookup
 			// of the version from the internet when executing ConfigFileAndDefaultsToInternalConfig
-			err := SetKubernetesVersion(nil, cfg)
-			kubeadmutil.CheckErr(err)
+			SetKubernetesVersion(cfg)
 
 			// This call returns the ready-to-use configuration based on the configuration file
 			internalcfg, err := configutil.ConfigFileAndDefaultsToInternalConfig(cfgPath, cfg)
